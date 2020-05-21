@@ -1,5 +1,11 @@
 let ajksTimes=0;
 export const request = (params) =>{
+// 判断是否需要token
+let header = {...params.header};
+if(params.url.includes("/my/")) {
+    header["Authorization"] = wx.getStorageSync("token");
+}
+
     ajksTimes++;
     // 显示加载效果
     wx.showLoading({
@@ -10,6 +16,7 @@ export const request = (params) =>{
     return new Promise((resolve, reject)=>{
         wx.request({
             ...params,
+            header,
           url: baseUrl + params.url,
             success:(result)=>{
                 resolve(result);
